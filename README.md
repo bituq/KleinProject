@@ -10,7 +10,7 @@ Furthermore, Klein tries to make mutable state more intuitive. It is founded on 
 
 ### What to expect?
 This project is in an early stage. It is nowhere near production-ready, and currently serves as a proof of concept.
-Roact is a perfectly fine UI library for most use-cases. But Klein tries to achieve things in a different way, which may be useful to some people.
+Roact is a perfectly fine UI library for most use-cases. But Klein tries to achieve things differently, which may be useful to some people.
 
 
 # Syntax
