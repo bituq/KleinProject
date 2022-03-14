@@ -4,7 +4,7 @@ This project is currently in very early stages. **It is unstable, so do not use 
 
 ### Why Klein?
 Currently, the most popular UI library out there is [Roact](https://roblox.github.io/roact/). However, Roact is not asynchronous - which is fine for smaller projects,
-but may cause performance issues in projects which large component trees. Klein attempts to solve this.
+but may cause performance issues in projects with large component trees. Klein attempts to solve this.
 
 Furthermore, Klein tries to make mutable state more intuitive. It is founded on the principle that programmers should expect state to be mutated from the get-go without special accessors.
 
