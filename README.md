@@ -1,5 +1,5 @@
 # Klein
-A declarative UI Library made for Roblox LUAU. Klein strives to be lightweight, asynchronous, and intuitive.
+A declarative UI Library made for Roblox. Klein strives to be lightweight, asynchronous, and intuitive.
 This project is currently in very early stages. **It is unstable, so do not use it in your projects yet.**
 
 ### Why Klein?
