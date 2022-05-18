@@ -1,35 +1,45 @@
 local Players = game:GetService("Players")
-local Klein = require(script.Parent.Klein.KleinObject)
-local Component = require(script.Parent.Klein.Component)
+--local Klein = require(script.Parent.Klein.KleinObject)
+--local Component = require(script.Parent.Klein.Component)
 
-local Clock = Component.new("Clock", {
-	currentTime = 0,
-})
+--local currentTime = 5
 
-Clock:Template(Klein("ScreenGui", {
-	TimeLabel = Klein("TextLabel", {
-		Size = UDim2.new(1, 0, 1, 0),
-		Text = "Time Elapsed: {{currentTime}}",
-	}),
-}))
+-- local clock = Component.new(Klein("ScreenGui", {
+-- 	Klein("TextLabel", {
+-- 		Size = UDim2.new(1, 0, 1 ,0),
+-- 		Text = "Time Elapsed" .. function() return currentTime end,
+-- 	})
+-- })
+-- )
 
-function Clock:AfterMount()
-	self.running = true
+-- local Clock = Component.new("Clock", {
+-- 	currentTime = 0,
+-- })
 
-	task.spawn(function()
-		while self.running do
-			self.Data.currentTime = self.Data.currentTime.Value + 1
+-- Clock:Template(Klein("ScreenGui", {
+-- 	TimeLabel = Klein("TextLabel", {
+-- 		Size = UDim2.new(1, 0, 1, 0),
+-- 		Text = "Time Elapsed: {{currentTime}}",
+-- 	}),
+-- }))
 
-			task.wait(1)
-		end
-	end)
-end
+-- function Clock:AfterMount()
+-- 	self.running = true
 
-function Clock:BeforeDestroy()
-	self.running = false
-end
+-- 	task.spawn(function()
+-- 		while self.running do
+-- 			self.Data.currentTime = self.Data.currentTime.Value + 1
 
-Clock:Mount(Players.LocalPlayer.PlayerGui)
+-- 			task.wait(1)
+-- 		end
+-- 	end)
+-- end
 
-task.wait(5)
-Clock:Destroy()
+-- function Clock:BeforeDestroy()
+-- 	self.running = false
+-- end
+
+-- Clock:Mount(Players.LocalPlayer.PlayerGui)
+
+-- task.wait(5)
+-- Clock:Destroy()
