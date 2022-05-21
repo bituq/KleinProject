@@ -2,10 +2,9 @@ local ReplicatedStorage = game:GetService("ReplicatedStorage")
 local Ref = require(ReplicatedStorage.Common.Ref)
 
 local a = Ref.new("Hello ")
-local b = a .. "World!"
+local b = a .. "world"
 
-print(b.Value)
+print(a.Value)
 
-a.Value = "Goodbye "
-
+print(b)
 print(b.Value)
