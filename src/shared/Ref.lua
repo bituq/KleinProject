@@ -1,6 +1,4 @@
 --!strict
-local ReplicatedStorage = game:GetService("ReplicatedStorage")
-
 type CallbackConnection = {
 	Destroy: () -> ()
 }
@@ -15,33 +13,7 @@ function Ref.new(value: any)
 	data._callbacks = {}
 	data.Value = value
 
-	getmetatable(self).__newindex = function (_, index, value)
-		rawset(data, index, value)
-
-		-- 'Value' setter
-		if index ~= "Value" then return end
-
-		for _, callback in ipairs(self._callbacks) do
-			callback(value, data.Value)
-		end
-	end
-
-	getmetatable(self).__concat = function(left: any, right: any)
-		local isLeft = left.Value
-		local newRef = Ref.new(isLeft and left.Value .. right or left .. right.Value)
-	
-		-- Ref.Changed(self, function (_, new)
-		-- 	rawset(newRef, 'Value', isLeft and new .. right or left .. new)
-		-- end)
-	
-		print(newRef)
-	
-		return newRef
-	end
-
-	getmetatable(self).__index = data
-
-	function self.Changed(callback: (any, any) -> ()): CallbackConnection
+	function data.Changed(callback: (any) -> ()): CallbackConnection
 		local handler = {}
 		local ref = self
 	
@@ -52,6 +24,34 @@ function Ref.new(value: any)
 		table.insert(self._callbacks, callback)
 	
 		return handler
+	end
+
+	getmetatable(self).__newindex = function (_, index, value)
+		rawset(data, index, value)
+
+		-- 'Value' setter
+		if index ~= "Value" then return end
+
+		for _, callback in ipairs(self._callbacks) do
+			callback(data.Value)
+		end
+	end
+
+	getmetatable(self).__concat = function(left: any, right: any)
+		local isLeft = left.Value
+		local newRef = Ref.new(isLeft and left.Value .. right or left .. right.Value)
+	
+		data.Changed(function (new)
+			newRef.Value = isLeft and new .. right or left .. new
+		end)
+	
+		return newRef
+	end
+
+	getmetatable(self).__index = data
+
+	getmetatable(self).__tostring = function ()
+		return data.Value
 	end
 
 	return self
