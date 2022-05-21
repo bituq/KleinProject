@@ -1,4 +1,7 @@
 --!strict
+local ReplicatedStorage = game:GetService("ReplicatedStorage")
+local Type = require(ReplicatedStorage.Common.Types)
+
 type CallbackConnection = {
 	Destroy: () -> ()
 }
@@ -53,6 +56,8 @@ function Ref.new(value: any)
 	getmetatable(self).__tostring = function ()
 		return data.Value
 	end
+
+	data.Type = Type.Named("ref")
 
 	return self
 end
