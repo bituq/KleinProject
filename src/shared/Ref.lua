@@ -11,32 +11,40 @@ Ref.__index = Ref
 
 function Ref.new(value: any)
 	local data = {}
-	local self = setmetatable(Ref, {
+	local self; self = setmetatable(Ref, {
 		__newindex = function (_, index, value)
 			rawset(data, index, value)
 	
+			-- 'Value' getter
 			if index ~= "Value" then return end
-	
-			for _, callback in ipairs(data._callbacks) do
+
+			for _, callback in ipairs(self._callbacks) do
 				callback(value, data["Value"])
 			end
 		end,
-		__index = data
+		__index = data,
 	})
-
-	getmetatable(self).__concat = function(left: any, right: any)
-		return left == self and data.Value .. right or left .. data.Value
-	end
-
-	data.Value = value
 
 	self._callbacks = {}
 	self.Type = Type.Named("Ref")
 
+	data.Value = value
+
+	getmetatable(self).__concat = function(left: any, right: any)
+		local isLeft = left == self
+		local newRef = Ref.new(isLeft and data.Value .. right or left .. data.Value)
+
+		self:Changed(function (_, new)
+			rawset(newRef, 'Value', isLeft and new .. right or left .. new)
+		end)
+
+		return newRef
+	end
+
 	return self
 end
 
-function Ref:Connect(callback: (any, any) -> ()): CallbackConnection
+function Ref:Changed(callback: (any, any) -> ()): CallbackConnection
 	local handler = {}
 	local ref = self
 
