@@ -41,9 +41,21 @@ function Ref.new(value: any)
 	end
 
 	getmetatable(self).__concat = function(left: any, right: any)
-		local isLeft = left.Value
-		local newRef = Ref.new(isLeft and left.Value .. right or left .. right.Value)
+		local isLeft = rawequal(left, self)
+		local newRef = Ref.new(isLeft and left.Value .. (Ref.Is(right) and right.Value or right) or (Ref.Is(left) and left.Value or left) .. right.Value)
 	
+		if isLeft and Ref.Is(right) then
+			right.Changed(function (new)
+				newRef.Value = data.Value .. new
+			end)
+		end
+
+		if not isLeft and Ref.Is(left) then
+			left.Changed(function (new)
+				newRef.Value = new .. data.Value
+			end)
+		end
+
 		data.Changed(function (new)
 			newRef.Value = isLeft and new .. right or left .. new
 		end)
@@ -60,6 +72,13 @@ function Ref.new(value: any)
 	data.Type = Type.Named("ref")
 
 	return self
+end
+
+function Ref.Is(other: any)
+	local success, isRef = pcall(function ()
+		return tostring(other.Type) == "ref"
+	end)
+	return success and isRef
 end
 
 return Ref

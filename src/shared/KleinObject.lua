@@ -1,16 +1,16 @@
+local ReplicatedStorage = game:GetService("ReplicatedStorage")
+local Ref = require(ReplicatedStorage.Common.Ref)
+
 function Assign(listeners: table, object: Instance | table, key: any, value: any)
-	local success, isRef = pcall(function ()
-		return tostring(value.Type) == "ref"
-	end)
 
 	-- The value is a ref
-	if success and isRef then
+	if Ref.Is(value) then
 		if listeners[key] then
 			listeners[key]:Destroy()
 		end
 
 		listeners[key] = value.Changed(function (new)
-			object[key] = new
+			object[key] = Ref.Is(value) and new.Value or new
 		end)
 
 		object[key] = value.Value
