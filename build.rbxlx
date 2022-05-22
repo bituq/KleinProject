@@ -622,22 +622,40 @@ gcLgc4RKxr21zq2UlJSM]]></BinaryString>
 					<string name="Name">Client</string>
 					<string name="ScriptGuid">{6334E96A-F390-4BAB-8272-EB3A4F180786}</string>
 					<ProtectedString name="Source"><![CDATA[local Players = game:GetService("Players")
+local TweenService = game:GetService("TweenService")
 local ReplicatedStorage = game:GetService("ReplicatedStorage")
 local Ref = require(ReplicatedStorage.Common.Ref)
 local Klein = require(ReplicatedStorage.Common.KleinObject)
 
-local a = Ref.new("world!")
-local c = Ref.new(" This is a text!")
-local b = "Hello " .. a
-Klein(Players.LocalPlayer.PlayerGui:WaitForChild("ScreenGui").Test, {Text = b .. c})
+local currentTime = Ref.new(0)
+local notation = Ref.new(" seconds")
 
-wait(1)
+Klein("ScreenGui", {
+	Parent = Players.LocalPlayer:WaitForChild("PlayerGui"),
+	Klein("TextLabel", {
+		Size = UDim2.new(1, 0, 1, 0),
+		TextSize = 28,
+		Text = "Time Elapsed: " .. currentTime .. notation
+	})
+})
 
-a.Value = "universe!"
+currentTime.Changed(function (value: number)
+	notation.Value = " second" .. (value == 1 and "" or "s")
+end)
 
-wait(1)
+local running = true
 
-c.Value = " Thanks for waiting."]]></ProtectedString>
+task.wait(3)
+
+task.spawn(function ()
+	while running do
+		currentTime.Value += 1
+		task.wait(1)
+	end
+end)
+
+task.wait(5)
+running = false]]></ProtectedString>
 					<int64 name="SourceAssetId">-1</int64>
 					<BinaryString name="Tags"></BinaryString>
 					<UniqueId name="UniqueId">484af897d3703682029628d30001e28e</UniqueId>
@@ -675,112 +693,6 @@ c.Value = " Thanks for waiting."]]></ProtectedString>
 			<UniqueId name="UniqueId">484af897d3703682029628d30001e1f5</UniqueId>
 			<token name="VirtualCursorMode">0</token>
 		</Properties>
-		<Item class="ScreenGui" referent="RBXBC00661B7A314EDD96EE9078E9B83F51">
-			<Properties>
-				<BinaryString name="AttributesSerialize"></BinaryString>
-				<bool name="AutoLocalize">true</bool>
-				<int name="DisplayOrder">0</int>
-				<bool name="Enabled">true</bool>
-				<bool name="IgnoreGuiInset">false</bool>
-				<string name="Name">ScreenGui</string>
-				<bool name="ResetOnSpawn">true</bool>
-				<Ref name="RootLocalizationTable">null</Ref>
-				<token name="SelectionBehaviorDown">0</token>
-				<token name="SelectionBehaviorLeft">0</token>
-				<token name="SelectionBehaviorRight">0</token>
-				<token name="SelectionBehaviorUp">0</token>
-				<bool name="SelectionGroup">false</bool>
-				<int64 name="SourceAssetId">-1</int64>
-				<BinaryString name="Tags"></BinaryString>
-				<UniqueId name="UniqueId">28309630f417b26b029a8f320060775f</UniqueId>
-				<token name="ZIndexBehavior">1</token>
-			</Properties>
-			<Item class="TextLabel" referent="RBXDC7A5734EC464412896030F152A124AC">
-				<Properties>
-					<bool name="Active">false</bool>
-					<Vector2 name="AnchorPoint">
-						<X>0.5</X>
-						<Y>0.5</Y>
-					</Vector2>
-					<BinaryString name="AttributesSerialize"></BinaryString>
-					<bool name="AutoLocalize">true</bool>
-					<token name="AutomaticSize">0</token>
-					<Color3 name="BackgroundColor3">
-						<R>1</R>
-						<G>1</G>
-						<B>1</B>
-					</Color3>
-					<float name="BackgroundTransparency">0</float>
-					<Color3 name="BorderColor3">
-						<R>0.105882362</R>
-						<G>0.164705887</G>
-						<B>0.207843155</B>
-					</Color3>
-					<token name="BorderMode">0</token>
-					<int name="BorderSizePixel">1</int>
-					<bool name="ClipsDescendants">false</bool>
-					<bool name="Draggable">false</bool>
-					<token name="Font">3</token>
-					<Font name="FontFace"></Font>
-					<int name="LayoutOrder">0</int>
-					<float name="LineHeight">1</float>
-					<int name="MaxVisibleGraphemes">-1</int>
-					<string name="Name">Test</string>
-					<Ref name="NextSelectionDown">null</Ref>
-					<Ref name="NextSelectionLeft">null</Ref>
-					<Ref name="NextSelectionRight">null</Ref>
-					<Ref name="NextSelectionUp">null</Ref>
-					<UDim2 name="Position">
-						<XS>0.5</XS>
-						<XO>0</XO>
-						<YS>0.5</YS>
-						<YO>0</YO>
-					</UDim2>
-					<bool name="RichText">false</bool>
-					<Ref name="RootLocalizationTable">null</Ref>
-					<float name="Rotation">0</float>
-					<bool name="Selectable">false</bool>
-					<token name="SelectionBehaviorDown">0</token>
-					<token name="SelectionBehaviorLeft">0</token>
-					<token name="SelectionBehaviorRight">0</token>
-					<token name="SelectionBehaviorUp">0</token>
-					<bool name="SelectionGroup">false</bool>
-					<Ref name="SelectionImageObject">null</Ref>
-					<int name="SelectionOrder">0</int>
-					<UDim2 name="Size">
-						<XS>0</XS>
-						<XO>200</XO>
-						<YS>0</YS>
-						<YO>50</YO>
-					</UDim2>
-					<token name="SizeConstraint">0</token>
-					<int64 name="SourceAssetId">-1</int64>
-					<BinaryString name="Tags"></BinaryString>
-					<string name="Text">Label</string>
-					<Color3 name="TextColor3">
-						<R>0</R>
-						<G>0</G>
-						<B>0</B>
-					</Color3>
-					<bool name="TextScaled">false</bool>
-					<float name="TextSize">28</float>
-					<Color3 name="TextStrokeColor3">
-						<R>0</R>
-						<G>0</G>
-						<B>0</B>
-					</Color3>
-					<float name="TextStrokeTransparency">1</float>
-					<float name="TextTransparency">0</float>
-					<token name="TextTruncate">0</token>
-					<bool name="TextWrapped">false</bool>
-					<token name="TextXAlignment">2</token>
-					<token name="TextYAlignment">1</token>
-					<UniqueId name="UniqueId">28309630f417b26b029a8f3200607793</UniqueId>
-					<bool name="Visible">true</bool>
-					<int name="ZIndex">1</int>
-				</Properties>
-			</Item>
-		</Item>
 	</Item>
 	<Item class="LocalizationService" referent="RBXDAC22D8D4E87410C90FFACF59830F51E">
 		<Properties>
@@ -1098,6 +1010,8 @@ function Ref.new(value: any)
 		-- 'Value' setter
 		if index ~= "Value" then return end
 
+		-- Create -value class if it is not already
+
 		for _, callback in ipairs(self._callbacks) do
 			callback(data.Value)
 		end
@@ -1168,7 +1082,7 @@ function Assign(listeners: table, object: Instance | table, key: any, value: any
 		end
 
 		listeners[key] = value.Changed(function (new)
-			object[key] = Ref.Is(value) and new.Value or new
+			object[key] = Ref.Is(new) and new.Value or new
 		end)
 
 		object[key] = value.Value
@@ -1176,7 +1090,7 @@ function Assign(listeners: table, object: Instance | table, key: any, value: any
 	end
 
 	local success, hasProperty = pcall(function ()
-		return object[key]
+		return object[key] == nil or object[key] ~= nil
 	end)
 
 	-- The given property exists on the object
@@ -1201,6 +1115,8 @@ function KleinObject(name: string | Instance, properties: table)
 			Assign(listeners, instance, key, value)
 		end
 	end
+
+	return instance
 end
 
 return KleinObject]]></ProtectedString>

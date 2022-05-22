@@ -37,9 +37,9 @@ end
 function KleinObject(object: string | Instance, properties: table)
 	local instance = (typeof(object) == "string") and Instance.new(object) or object
 	local listeners = {}
-
-	for key, value in pairs(properties) do
-		if instance then
+	
+	if instance then
+		for key, value in pairs(properties) do
 			Assign(listeners, instance, key, value)
 		end
 	end
