@@ -34,8 +34,8 @@ function Assign(listeners: table, object: Instance | table, key: any, value: any
 	end
 end
 
-function KleinObject(name: string | Instance, properties: table)
-	local instance = (typeof(name) == "string") and Instance.new(name) or name
+function KleinObject(object: string | Instance, properties: table)
+	local instance = (typeof(object) == "string") and Instance.new(object) or object
 	local listeners = {}
 
 	for key, value in pairs(properties) do
