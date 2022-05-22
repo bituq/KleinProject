@@ -3,15 +3,24 @@ local ReplicatedStorage = game:GetService("ReplicatedStorage")
 local Ref = require(ReplicatedStorage.Common.Ref)
 local Klein = require(ReplicatedStorage.Common.KleinObject)
 
-local a = Ref.new("world!")
-local c = Ref.new(" This is a text!")
-local b = "Hello " .. a .. c
-Klein(Players.LocalPlayer.PlayerGui:WaitForChild("ScreenGui").Test, {Text = b})
+local currentTime = Ref.new(0)
 
-wait(1)
+Klein("ScreenGui", {
+	Parent = Players.LocalPlayer:WaitForChild("PlayerGui"),
+	Klein("TextLabel", {
+		Size = UDim2.new(1, 0, 1, 0),
+		Text = "Time Elapsed: " .. currentTime,
+	})
+})
 
-a.Value = "universe!"
+local running = true
 
-wait(1)
+task.spawn(function ()
+	while running do
+		currentTime.Value += 1
+		task.wait(1)
+	end
+end)
 
-c.Value = " Thanks for waiting."
+task.wait(5)
+running = false

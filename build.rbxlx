@@ -81,27 +81,27 @@
 			<Properties>
 				<BinaryString name="AttributesSerialize"></BinaryString>
 				<CoordinateFrame name="CFrame">
-					<X>-9.85759258</X>
-					<Y>25.2806702</Y>
-					<Z>33.4286385</Z>
-					<R00>0.908234596</R00>
-					<R01>0.231402695</R01>
-					<R02>-0.348658502</R02>
-					<R10>0</R10>
-					<R11>0.833191514</R11>
-					<R12>0.552984536</R12>
-					<R20>0.418461412</R20>
-					<R21>-0.502239704</R21>
-					<R22>0.756733358</R22>
+					<X>-17.5416203</X>
+					<Y>21.388607</Y>
+					<Z>28.3107338</Z>
+					<R00>0.4908714</R00>
+					<R01>0.312223464</R01>
+					<R02>-0.813364565</R02>
+					<R10>-0</R10>
+					<R11>0.933579743</R11>
+					<R12>0.358370006</R12>
+					<R20>0.871232092</R20>
+					<R21>-0.175913587</R21>
+					<R22>0.45826754</R22>
 				</CoordinateFrame>
 				<Ref name="CameraSubject">null</Ref>
-				<token name="CameraType">6</token>
+				<token name="CameraType">0</token>
 				<float name="FieldOfView">70</float>
 				<token name="FieldOfViewMode">0</token>
 				<CoordinateFrame name="Focus">
-					<X>-2.8844223</X>
-					<Y>14.2209797</Y>
-					<Z>18.293972</Z>
+					<X>-1.27422905</X>
+					<Y>14.2211628</Y>
+					<Z>19.1453266</Z>
 					<R00>1</R00>
 					<R01>0</R01>
 					<R02>0</R02>
@@ -626,13 +626,18 @@ local ReplicatedStorage = game:GetService("ReplicatedStorage")
 local Ref = require(ReplicatedStorage.Common.Ref)
 local Klein = require(ReplicatedStorage.Common.KleinObject)
 
-local a = Ref.new("Hello ")
-local b = a .. "world!"
-Klein(Players.LocalPlayer.PlayerGui:WaitForChild("ScreenGui").Test, {Something = Instance.new("TextLabel")})
+local a = Ref.new("world!")
+local c = Ref.new(" This is a text!")
+local b = "Hello " .. a
+Klein(Players.LocalPlayer.PlayerGui:WaitForChild("ScreenGui").Test, {Text = b .. c})
 
-wait(3)
+wait(1)
 
-a.Value = "universe!"]]></ProtectedString>
+a.Value = "universe!"
+
+wait(1)
+
+c.Value = " Thanks for waiting."]]></ProtectedString>
 					<int64 name="SourceAssetId">-1</int64>
 					<BinaryString name="Tags"></BinaryString>
 					<UniqueId name="UniqueId">484af897d3703682029628d30001e28e</UniqueId>
@@ -1099,9 +1104,21 @@ function Ref.new(value: any)
 	end
 
 	getmetatable(self).__concat = function(left: any, right: any)
-		local isLeft = left.Value
-		local newRef = Ref.new(isLeft and left.Value .. right or left .. right.Value)
+		local isLeft = rawequal(left, self)
+		local newRef = Ref.new(isLeft and left.Value .. (Ref.Is(right) and right.Value or right) or (Ref.Is(left) and left.Value or left) .. right.Value)
 	
+		if isLeft and Ref.Is(right) then
+			right.Changed(function (new)
+				newRef.Value = data.Value .. new
+			end)
+		end
+
+		if not isLeft and Ref.Is(left) then
+			left.Changed(function (new)
+				newRef.Value = new .. data.Value
+			end)
+		end
+
 		data.Changed(function (new)
 			newRef.Value = isLeft and new .. right or left .. new
 		end)
@@ -1120,6 +1137,13 @@ function Ref.new(value: any)
 	return self
 end
 
+function Ref.Is(other: any)
+	local success, isRef = pcall(function ()
+		return tostring(other.Type) == "ref"
+	end)
+	return success and isRef
+end
+
 return Ref]]></ProtectedString>
 					<int64 name="SourceAssetId">-1</int64>
 					<BinaryString name="Tags"></BinaryString>
@@ -1132,19 +1156,19 @@ return Ref]]></ProtectedString>
 					<Content name="LinkedSource"><null></null></Content>
 					<string name="Name">KleinObject</string>
 					<string name="ScriptGuid">{6D1E3655-BE5B-4883-8B72-943AC90AC966}</string>
-					<ProtectedString name="Source"><![CDATA[function Assign(listeners: table, object: Instance | table, key: any, value: any)
-	local success, isRef = pcall(function ()
-		return tostring(value.Type) == "ref"
-	end)
+					<ProtectedString name="Source"><![CDATA[local ReplicatedStorage = game:GetService("ReplicatedStorage")
+local Ref = require(ReplicatedStorage.Common.Ref)
+
+function Assign(listeners: table, object: Instance | table, key: any, value: any)
 
 	-- The value is a ref
-	if success and isRef then
+	if Ref.Is(value) then
 		if listeners[key] then
 			listeners[key]:Destroy()
 		end
 
 		listeners[key] = value.Changed(function (new)
-			object[key] = new
+			object[key] = Ref.Is(value) and new.Value or new
 		end)
 
 		object[key] = value.Value

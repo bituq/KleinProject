@@ -10,7 +10,7 @@ function Assign(listeners: table, object: Instance | table, key: any, value: any
 		end
 
 		listeners[key] = value.Changed(function (new)
-			object[key] = Ref.Is(value) and new.Value or new
+			object[key] = Ref.Is(new) and new.Value or new
 		end)
 
 		object[key] = value.Value
@@ -18,7 +18,7 @@ function Assign(listeners: table, object: Instance | table, key: any, value: any
 	end
 
 	local success, hasProperty = pcall(function ()
-		return object[key]
+		return object[key] == nil or object[key] ~= nil
 	end)
 
 	-- The given property exists on the object
@@ -43,6 +43,8 @@ function KleinObject(name: string | Instance, properties: table)
 			Assign(listeners, instance, key, value)
 		end
 	end
+
+	return instance
 end
 
 return KleinObject

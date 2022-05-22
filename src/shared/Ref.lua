@@ -35,6 +35,8 @@ function Ref.new(value: any)
 		-- 'Value' setter
 		if index ~= "Value" then return end
 
+		-- Create -value class if it is not already
+
 		for _, callback in ipairs(self._callbacks) do
 			callback(data.Value)
 		end
